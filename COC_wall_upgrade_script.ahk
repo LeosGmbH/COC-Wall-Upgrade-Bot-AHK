@@ -15,7 +15,7 @@ TargetWin := "ahk_class CROSVM_1 ahk_exe crosvm.exe"
 
 ; === Image Files (Load dynamically from folders) ===
 images := {}
-image_groups := ["builder", "mauer", "gold", "elexier", "popup"]
+image_groups := ["builder", "wall", "gold", "elexier", "popup"]
 
 images := LoadImagePaths(image_groups)
 
@@ -30,9 +30,9 @@ popupSearchState := "" ; Prevents log spam during popup search
 ; === Hotkeys ===
 F2::ToggleScript()
 F3::
-    MsgBox, 64, COC Popup Monitor - Help, Script Hotkeys:`n`n• F2 - Start/Stop `n• F3 - Show this help`n• F4 - Test Mauer Images`n• F5 - Test Gold Images`n• F6 - Test Elexier Images`n• F7 - Test Builder Images`n• F8 - Test Popup Images`n• ESC - Exit script (kills COC macro)`n`nNotes:`n- Make sure "popup.png" is in script folder`n- Works on all monitors`n- COC macro gets killed when stopping/exiting
+    MsgBox, 64, COC Popup Monitor - Help, Script Hotkeys:`n`n• F2 - Start/Stop `n• F3 - Show this help`n• F4 - Test wall Images`n• F5 - Test Gold Images`n• F6 - Test Elexier Images`n• F7 - Test Builder Images`n• F8 - Test Popup Images`n• ESC - Exit script (kills COC macro)`n`nNotes:`n- Make sure "popup.png" is in script folder`n- Works on all monitors`n- COC macro gets killed when stopping/exiting
 return
-F4::CheckImageGroupWithPopup("mauer")
+F4::CheckImageGroupWithPopup("wall")
 F5::CheckImageGroupWithPopup("gold")
 F6::CheckImageGroupWithPopup("elexier")
 F7::CheckImageGroupWithPopup("builder")
@@ -118,12 +118,12 @@ StartRoutine:
             
             ; --- Search for wall (with scrolling) ---
             Log("Searching for a wall...")
-            Tolerance := GetTolerance("mauer.png")
+            Tolerance := GetTolerance("wall.png")
             ScrollAttempts := 0
-            MauerFound := false
+            wallFound := false
             Loop {
-                if WaitForImageClick(images["mauer"], 400, Tolerance) {
-                    MauerFound := true
+                if WaitForImageClick(images["wall"], 400, Tolerance) {
+                    wallFound := true
                     Log("Wall found and clicked.")
                     break
                 }
@@ -139,7 +139,7 @@ StartRoutine:
                 ScrollAttempts++
             }
 
-            if (!MauerFound) {
+            if (!wallFound) {
                 Log("Breaking upgrade loop because no wall was found.")
                 break ; No wall found, exit loop
             }
@@ -254,7 +254,7 @@ WaitForEitherClick(images, timeout) {
 }
 
 GetTolerance(imageFile) {
-    if InStr(imageFile, "mauer") {
+    if InStr(imageFile, "wall") {
         return "*130"
     }
     else if InStr(imageFile, "gold") || InStr(imageFile, "elexier") {
