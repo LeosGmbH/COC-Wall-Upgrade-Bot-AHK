@@ -1,4 +1,4 @@
-﻿#NoEnv
+#NoEnv
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
@@ -7,13 +7,13 @@ CoordMode, Pixel, Screen
 CoordMode, Mouse, Screen
 SetTitleMatchMode, 2
 
-; === Log-Initialisierung ===
+; === Log Initialization ===
 logFilePath := InitLogging()
 
-; === Fensterkennung für COC Emulator ===
+; === Window Identifier -> COC Emulator ===
 TargetWin := "ahk_class CROSVM_1 ahk_exe crosvm.exe"
 
-; === Bilddateien (Dynamisch aus Ordnern laden) ===
+; === Image Files (Load dynamically from folders) ===
 images := {}
 image_groups := ["builder", "mauer", "gold", "elexier", "popup"]
 
@@ -22,10 +22,10 @@ images := LoadImagePaths(image_groups)
 
 
 
-; === Statusvariable ===
+; === Status Variables ===
 MonitoringActive := false
-runCounter := 0 ; Zählt die Durchläufe bis zum Upgrade-Zyklus
-popupSearchState := "" ; Verhindert Log-Spam bei der Popup-Suche
+runCounter := 0 ; Counts the runs until the upgrade cycle
+popupSearchState := "" ; Prevents log spam during popup search
 
 ; === Hotkeys ===
 F2::ToggleScript()
@@ -37,13 +37,13 @@ F8::CheckImageGroupWithPopup("popup")
 
 F9::
     MouseGetPos, xpos, ypos
-    ToolTip, Maus-Position: %xpos%`, %ypos%
+    ToolTip, Mouse Position: %xpos%`, %ypos%
     SetTimer, RemoveToolTip, 2000
 return
 
 Esc::ExitAppWithKill()
 
-; === Skript Start/Stopp mit F2 ===
+; === Script Start/Stop with F2 ===
 ToggleScript() {
     global MonitoringActive
     MonitoringActive := !MonitoringActive
@@ -53,22 +53,22 @@ ToggleScript() {
 
     if (MonitoringActive) {
         Log("Script enabled.")
-        ToolTip, ✅ Makro aktiviert
+        ToolTip, ✅ Macro activated
         SetTimer, StartRoutine, 1000
     } else {
         Log("Script disabled.")
-        ToolTip, ❌ Makro gestoppt
+        ToolTip, ❌ Macro stopped
         SetTimer, StartRoutine, Off
     }
     SetTimer, RemoveToolTip, 2000
 }
 
-; === Hauptablauf ===
+; === Main Routine ===
 StartRoutine:
     global runCounter
     Log("--- Starting new routine cycle ---")
 
-    ; 1. IMMER zuerst auf initiales Popup warten und klicken
+    ; 1. ALWAYS wait for and click the initial popup first
     if (popupSearchState != "waiting") {
         Log("Searching for popup...")
     }
@@ -78,42 +78,42 @@ StartRoutine:
             popupSearchState := "waiting"
             Log("Popup not found. Quietly waiting for it to appear...")
         }
-        return ; Beendet die Routine, wenn kein Popup gefunden wird
+        return ; Ends the routine if no popup is found
     }
 
-    popupSearchState := "found" ; Zurücksetzen, da Popup gefunden wurde
+    popupSearchState := "found" ; Reset, because popup was found
     Log("Popup found and clicked.")
     xOffset := x + 10
     yOffset := y + 10
     Click, %xOffset%, %yOffset%
     Sleep, 500
 
-    runCounter++ ; Zähler erhöhen
+    runCounter++ ; Increment counter
     Log("Run counter is now: " . runCounter)
 
-    ; Wenn 6 Durchläufe abgeschlossen sind, führe den Upgrade-Zyklus aus
+    ; When 10 runs are complete, execute the upgrade cycle //change this to any number you want
     if (runCounter >= 10) {
         Log("Run counter reached 6. Starting upgrade cycle.")
-        runCounter := 0 ; Zähler zurücksetzen
+        runCounter := 0 ; Reset counter
         Log("Counter reset to 0.")
 
-        ; 2. Einzelne, durchgehende Schleife für den Upgrade-Zyklus
+        ; 2. Single, continuous loop for the upgrade cycle
         Loop {
-            ; --- Builder suchen ---
+            ; --- Search for builder ---
             Log("Searching for a free builder...")
             Tolerance := GetTolerance("builder.png")
             if !WaitForImageClick(images["builder"], 30000, Tolerance) {
                 Log("No free builder found within 30s. Breaking upgrade loop.")
-                break ; Kein Builder gefunden, Schleife beenden
+                break ; No builder found, exit loop
             }
             Log("Builder found and clicked.")
             Sleep, 300
 
-            ; --- Maus nach unten bewegen ---
+            ; --- Move mouse down ---
             MouseMove, 0, 200, 0, R
             Sleep, 300
             
-            ; --- Mauer suchen (mit Scrollen) ---
+            ; --- Search for wall (with scrolling) ---
             Log("Searching for a wall...")
             Tolerance := GetTolerance("mauer.png")
             ScrollAttempts := 0
@@ -132,16 +132,16 @@ StartRoutine:
                     Send, {WheelDown}
                     Sleep, 30
                 }
-                Sleep, 700 ; Angepasste Wartezeit
+                Sleep, 700 ; Adjusted wait time
                 ScrollAttempts++
             }
 
             if (!MauerFound) {
                 Log("Breaking upgrade loop because no wall was found.")
-                break ; Keine Mauer gefunden, Schleife beenden
+                break ; No wall found, exit loop
             }
 
-            ; --- Gold oder Elexier suchen ---
+            ; --- Search for Gold or Elixir ---
             Log("Searching for Gold or Elixir to upgrade...")
             goldAndElexier := images["gold"].Clone()
             for _, img in images["elexier"] {
@@ -150,7 +150,7 @@ StartRoutine:
 
             if !WaitForEitherClick(goldAndElexier, 5000) {
                 Log("No Gold or Elixir button found. Breaking upgrade loop.")
-                break ; Keine Ressourcen gefunden, Schleife beenden
+                break ; No resources found, exit loop
             }
             else{
                 Sleep, 500
@@ -160,22 +160,22 @@ StartRoutine:
             Log("Resource found and clicked.")
             Log("Upgrade initiated. Looping back to find next builder.")
             
-            ; Die Schleife beginnt von vorn (sucht wieder nach Builder)
+            ; The loop starts over (searches for builder again)
         }
          Sleep, 1000
-        ; Nach dem Upgrade-Versuch (erfolgreich oder nicht), zum Angriff übergehen
+        ; After the upgrade attempt (successful or not), proceed to attack
         Log("Upgrade cycle finished. Starting attack.")
-        SetTimer, StartRoutine, Off ; Pausiere die Hauptroutine
+        SetTimer, StartRoutine, Off ; Pause the main routine
         RunAngriff()
-        WaitForPopupAndRestart() ; Warte auf Popup und starte dann neu
+        WaitForPopupAndRestart() ; Wait for popup and then restart
         return
     }
     Sleep, 8000
-    ; 3. Angriff starten, wenn der Upgrade-Zyklus noch nicht dran ist
+    ; 3. Start attack if it's not the upgrade cycle's turn yet
     Log("Starting attack.")
-    SetTimer, StartRoutine, Off ; Pausiere die Hauptroutine
+    SetTimer, StartRoutine, Off ; Pause the main routine
     RunAngriff()
-    WaitForPopupAndRestart() ; Warte auf Popup und starte dann neu
+    WaitForPopupAndRestart() ; Wait for popup and then restart
     
 return
 
@@ -186,10 +186,10 @@ WaitForPopupAndRestart() {
         if ImageFoundInGroup(images["popup"], x, y) {
             Log("Popup found. Restarting main routine.")
             popupSearchState := "" ; Reset state
-            SetTimer, StartRoutine, 1000 ; Timer wieder aktivieren
+            SetTimer, StartRoutine, 1000 ; Reactivate timer
             break
         }
-        Sleep, 1000 ; Warte 1 Sekunde zwischen den Suchversuchen
+        Sleep, 1000 ; Wait 1 second between search attempts
     }
 }
 
@@ -238,8 +238,8 @@ WaitForEitherClick(images, timeout) {
         for _, img in images {
             Tolerance := GetTolerance(img)
             if ImageFound(img, x, y, Tolerance) {
-                Sleep, 700 ; Kurze Verzögerung vor dem Klick
-                Click, %x%, %y% ; Klick auf das gefundene Gold/Elexier Bild
+                Sleep, 700 ; Short delay before the click
+                Click, %x%, %y% ; Click on the found Gold/Elixir image
                 Sleep, 700
                 return true
             }
@@ -267,17 +267,17 @@ GetTolerance(imageFile) {
 
 
 
-; === Bildsuche mit Fensterbezug (F3-F6) ===
+; === Image Search with Window Context (F3-F6) ===
 CheckImageGroupWithPopup(groupName) {
     global images, TargetWin
 
     if !images.HasKey(groupName) {
-        MsgBox, ⚠️ Bild-Gruppe '%groupName%' nicht definiert.
+        MsgBox, ⚠️ Image group '%groupName%' not defined.
         return
     }
 
     if !WinExist(TargetWin) {
-        MsgBox, ❌ Fenster nicht gefunden: Clash of Clans Emulator läuft nicht!
+        MsgBox, ❌ Window not found: Clash of Clans Emulator is not running!
         return
     }
 
@@ -289,10 +289,10 @@ CheckImageGroupWithPopup(groupName) {
         ImageSearch, FoundX, FoundY, X, Y, X+W, Y+H, %Tolerance% %A_ScriptDir%\%imageFile%
         
         if (ErrorLevel = 0) {
-            ToolTip, ✅ %imageFile% gefunden bei %FoundX%, %FoundY%
+            ToolTip, ✅ %imageFile% found at %FoundX%, %FoundY%
             Gui, +AlwaysOnTop -Caption +ToolWindow
             Gui, Color, Red
-            Gui, Add, Text, x0 y0 w80 h20 Center BackgroundTrans cWhite, ✔ Gefunden
+            Gui, Add, Text, x0 y0 w80 h20 Center BackgroundTrans cWhite, ✔ Found
             Gui, Show, x%FoundX% y%FoundY% w80 h20 NoActivate
             SetTimer, CloseTestGui, 2000
             found := true
@@ -301,7 +301,7 @@ CheckImageGroupWithPopup(groupName) {
     }
 
     if (!found) {
-        ToolTip, ❌ Kein Bild aus Gruppe '%groupName%' gefunden.
+        ToolTip, ❌ No image from group '%groupName%' found.
     }
     SetTimer, RemoveToolTip, 3000
 }
@@ -340,7 +340,7 @@ ExitAppWithKill() {
     ExitApp
 }
 
-; === Logging Funktionen ===
+; === Logging Functions ===
 InitLogging() {
     logDir := A_ScriptDir . "\logs"
     if !FileExist(logDir)
