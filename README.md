@@ -76,6 +76,8 @@ Pullover's Macro Creator: https://www.macrocreator.com/
 
 COC for PC(Windows): https://play.google.com/pc-store/games/details?id=com.supercell.clashofclans&hl=en
 
+Skript: https://github.com/LeosGmbH/COC-Wall-Upgrade-Bot-AHK/releases/tag/v1.0
+
 ---
 
 ## 🚀 How to Use
