@@ -29,10 +29,13 @@ popupSearchState := "" ; Prevents log spam during popup search
 
 ; === Hotkeys ===
 F2::ToggleScript()
-F3::CheckImageGroupWithPopup("builder")
+F3::
+    MsgBox, 64, COC Popup Monitor - Help, Script Hotkeys:`n`n• F2 - Start/Stop `n• F3 - Show this help`n• F4 - Test Mauer Images`n• F5 - Test Gold Images`n• F6 - Test Elexier Images`n• F7 - Test Builder Images`n• F8 - Test Popup Images`n• ESC - Exit script (kills COC macro)`n`nNotes:`n- Make sure "popup.png" is in script folder`n- Works on all monitors`n- COC macro gets killed when stopping/exiting
+return
 F4::CheckImageGroupWithPopup("mauer")
 F5::CheckImageGroupWithPopup("gold")
 F6::CheckImageGroupWithPopup("elexier")
+F7::CheckImageGroupWithPopup("builder")
 F8::CheckImageGroupWithPopup("popup")
 
 F9::
@@ -316,10 +319,7 @@ RemoveToolTip:
     SetTimer, RemoveToolTip, Off
 return
 
-; F7 hotkey to show help popup again
-F7::
-MsgBox, 64, COC Popup Monitor - Help, Script Hotkeys:`n`n• F2 - Start/Stop `n• F3 - Test Builder Images`n• F4 - Test Mauer Images`n• F5 - Test Gold Images`n• F6 - Test Elexier Images`n• F7 - Show this help`n• F8 - Test Popup Images`n• ESC - Exit script (kills COC macro)`n`nNotes:`n- Make sure "popup.png" is in script folder`n- Works on all monitors`n- COC macro gets killed when stopping/exiting
-return
+
 
 LoadImagePaths(groups) {
     local loaded_images := {}

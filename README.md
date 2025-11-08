@@ -67,3 +67,32 @@ For the script to function correctly, precise image recognition is required. The
 4.  **Attack Macro:** The file **`Angriff.exe`** (your custom attack recording) must be in the same directory.
 ---
 
+### Download Links:
+
+AutoHotkey: https://www.autohotkey.com/
+
+Pullover's Macro Creator: https://www.macrocreator.com/
+
+COC for PC(Windows): https://play.google.com/pc-store/games/details?id=com.supercell.clashofclans&hl=en
+
+---
+
+## 🚀 How to Use
+
+This script is controlled via a set of hotkeys. Make sure the script is running and the Clash of Clans window is active.
+
+### Hotkeys
+
+| Key | Action | Description |
+| :--- | :--- | :--- |
+| **`F2`** | **Start / Stop Script** | Toggles the main automation loop on and off. A tooltip will confirm the status. |
+| **`F3`** | **Show Help** | Displays a message box with a list of all hotkeys. |
+| **`F4`** | **Test Wall Images** | Searches for the `mauer` (wall) images on screen. |
+| **`F5`** | **Test Gold Images** | Searches for the `gold` upgrade button images. |
+| **`F6`** | **Test Elixir Images** | Searches for the `elexier` upgrade button images. |
+| **`F7`** | **Test Builder Images** | Searches for the `builder` images on screen and shows a confirmation if found. |
+| **`F8`** | **Test Popup Images** | Searches for the `popup` ("Back to Home") button image. |
+| **`F9`** | **Show Mouse Position** | Displays a tooltip with the current X and Y coordinates of your mouse cursor. |
+| **`Esc`** | **Exit Script** | Immediately terminates the script and any associated processes. |
+
+
