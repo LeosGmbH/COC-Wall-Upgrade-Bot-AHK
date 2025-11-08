@@ -67,8 +67,3 @@ For the script to function correctly, precise image recognition is required. The
 4.  **Attack Macro:** The file **`Angriff.exe`** (your custom attack recording) must be in the same directory.
 ---
 
-### 1. Clone the Repository
-
-```bash
-git clone [https://github.com/YOUR-GITHUB-NAME/COC-Wall-Upgrade-Bot-AHK.git](https://github.com/YOUR-GITHUB-NAME/COC-Wall-Upgrade-Bot-AHK.git)
-cd COC-Wall-Upgrade-Bot-AHK
