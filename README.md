@@ -21,7 +21,7 @@ The core automation combines two phases:
 
 #### 2.1 Attack Cycle (Farming)
 
-* The script executes the separate macro **`Angriff.exe`** (your custom attack recording) consecutively a set number of times (currently configured for **10 runs**) to gather Gold and Elixir.
+* The script executes the separate macro **`Attack.exe`** (your custom attack recording) consecutively a set number of times (currently configured for **10 runs**) to gather Gold and Elixir.
 * After each run, it waits for the **`popup.png`** to reappear and clicks it to return to the village before launching the next attack.
 
 #### 2.2 Upgrade Cycle (Spending)
@@ -48,7 +48,7 @@ For the script to function correctly, precise image recognition is required. The
 | :--- | :--- | :--- |
 | **`popup/`** | The "Back to Home" button. | **Initializes the script and resets the loop after every attack.** |
 | **`builder/`** | The "Free Builder" icon. | Finds a Builder to begin the upgrade process. |
-| **`mauer/`** | An upgradable Wall tile. | Finds the object to be upgraded (includes scrolling). |
+| **`wall/`** | An upgradable Wall tile. | Finds the object to be upgraded (includes scrolling). |
 | **`gold/` / `elexier/`** | The "Upgrade" button showing **WHITE text**. | **Crucial:** Confirms that sufficient resources are available for the upgrade. (Red button text will cause the ImageSearch to fail.) |
 
 ---
@@ -63,8 +63,8 @@ For the script to function correctly, precise image recognition is required. The
     * It targets the window handle **`ahk_class CROSVM_1 ahk_exe crosvm.exe`**, which is the default name used by Google Play Games for the COC window.
     * If you experience issues, you may need to confirm this window title is correct on your system and adjust the `TargetWin` variable in the code.
 2.  **AutoHotkey:** The main script file (`COC-Wall-Upgrade-Bot.ahk`) requires **AutoHotkey v1** to run.
-3.  **Graphics (PNGs):** The folders **`builder/`, `mauer/`, `gold/`, `elexier/`, `popup/`** must be present in the script's root directory and contain the corresponding `.png` images used for precise object recognition (ImageSearch).
-4.  **Attack Macro:** The file **`Angriff.exe`** (your custom attack recording) must be in the same directory.
+3.  **Graphics (PNGs):** The folders **`builder/`, `wall/`, `gold/`, `elexier/`, `popup/`** must be present in the script's root directory and contain the corresponding `.png` images used for precise object recognition (ImageSearch).
+4.  **Attack Macro:** The file **`Attack.exe`** (your custom attack recording) must be in the same directory.
 ---
 
 ### Download Links:
@@ -87,7 +87,7 @@ This script is controlled via a set of hotkeys. Make sure the script is running 
 | :--- | :--- | :--- |
 | **`F2`** | **Start / Stop Script** | Toggles the main automation loop on and off. A tooltip will confirm the status. |
 | **`F3`** | **Show Help** | Displays a message box with a list of all hotkeys. |
-| **`F4`** | **Test Wall Images** | Searches for the `mauer` (wall) images on screen. |
+| **`F4`** | **Test Wall Images** | Searches for the `wall` (wall) images on screen. |
 | **`F5`** | **Test Gold Images** | Searches for the `gold` upgrade button images. |
 | **`F6`** | **Test Elixir Images** | Searches for the `elexier` upgrade button images. |
 | **`F7`** | **Test Builder Images** | Searches for the `builder` images on screen and shows a confirmation if found. |
