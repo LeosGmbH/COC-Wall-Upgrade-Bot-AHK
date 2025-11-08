@@ -65,6 +65,7 @@ For the script to function correctly, precise image recognition is required. The
 2.  **AutoHotkey:** The main script file (`COC-Wall-Upgrade-Bot.ahk`) requires **AutoHotkey v1** to run.
 3.  **Graphics (PNGs):** The folders **`builder/`, `wall/`, `gold/`, `elexier/`, `popup/`** must be present in the script's root directory and contain the corresponding `.png` images used for precise object recognition (ImageSearch).
 4.  **Attack Macro:** The file **`Attack.exe`** (your custom attack recording) must be in the same directory.
+5.  **No Star Bonus:** Make sure you cant collect any 5 stars star bonus, or else the script could crash!
 ---
 
 ### Download Links:
