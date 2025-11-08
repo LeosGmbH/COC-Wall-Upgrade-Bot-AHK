@@ -19,7 +19,7 @@ image_groups := ["builder", "mauer", "gold", "elexier", "popup"]
 
 images := LoadImagePaths(image_groups)
 
- 
+
 
 
 ; === Statusvariable ===
