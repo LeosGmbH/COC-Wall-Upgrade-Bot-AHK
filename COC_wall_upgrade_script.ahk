@@ -95,7 +95,7 @@ StartRoutine:
     Log("Run counter is now: " . runCounter)
 
     ; When 10 runs are complete, execute the upgrade cycle //change this to any number you want
-    if (runCounter >= 10) {
+    if (runCounter >= 6) {
         Log("Run counter reached 6. Starting upgrade cycle.")
         runCounter := 0 ; Reset counter
         Log("Counter reset to 0.")
